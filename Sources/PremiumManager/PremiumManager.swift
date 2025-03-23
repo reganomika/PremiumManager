@@ -82,6 +82,19 @@ public final class PremiumManager {
             defaultProduct.accept(products[safe: 1])
         }
     }
+    
+    public func submitPushNotificationsToken(deviceToken: Data) {
+        Apphud.submitPushNotificationsToken(
+            token: deviceToken,
+            callback: nil
+        )
+    }
+    
+    @MainActor public func handlePushNotification(notification: UNNotification) {
+        Apphud.handlePushNotification(
+            apsInfo: notification.request.content.userInfo
+        )
+    }
 
     @MainActor public func purchase(product: ApphudProduct?) {
         guard config != nil else {
