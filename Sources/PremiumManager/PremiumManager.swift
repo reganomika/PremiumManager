@@ -49,13 +49,13 @@ public final class PremiumManager {
 
         Observable<[ApphudPlacement]>.create { observer in
             Task {
-                let placements = await Apphud.placements(maxAttempts: 10)
+                let placements = await Apphud.placements(maxAttempts: 3)
                 observer.onNext(placements)
                 observer.onCompleted()
             }
             return Disposables.create()
         }
-        .compactMap { $0.first?.paywall }
+        .compactMap { $0.filter { $0.identifier == "main"}.first?.paywall }
         .do(onNext: { [weak self] paywall in
             if let id = paywall.json?["paywall"] as? Int {
                 self?.paywallType.accept(PaymentScreenType(rawValue: id))
